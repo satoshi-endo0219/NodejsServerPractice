@@ -1,11 +1,16 @@
 import fs from "fs";
-import http from "http";
+import https from "https";
 
 const hostname = "localhost";
 
 const port = 8000;
 
-const server = http.createServer((request, response) => {
+const options = {
+    key: fs.readFileSync("./localhttps_key.pem"),
+    cert: fs.readFileSync("./localhttps_cert.pem"),
+};
+
+const server = https.createServer(options, (request, response) => {
     fs.readFile("index.html", (err, data) => {
         if (err) {
             response.statusCode = 404;
@@ -21,5 +26,5 @@ const server = http.createServer((request, response) => {
 });
 
 server.listen(port, () => {
-    console.log(`Server running at http://${hostname}:${port}/`);
+    console.log(`Server running at https://${hostname}:${port}/`);
 });
